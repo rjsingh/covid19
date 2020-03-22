@@ -54,7 +54,7 @@ def getRanks(countyMap):
     rank = {}
     cases = sorted(list(set(countyMap.values())), reverse=True)
     for idx, c in enumerate(cases):
-        rank[c] = idx
+        rank[c] = idx+1
     return rank
 
 def getCovid19Numbers(locationName):
@@ -68,16 +68,20 @@ def getCovid19Numbers(locationName):
     word_engine = inflect.engine()
     for county, dist in closestCouncil.items():
         cases = countyMap[county]
-        outputData.append([county, cases, word_engine.ordinal(ranks[cases]), "%.2f" % dist])
+        outputData.append({'county': county, 'cases': cases,
+                           'rank': word_engine.ordinal(ranks[cases]),
+                           'distance': "%.2f" % dist})
 
     return outputData
-    return tabulate(outputData, headers=["Location", "Cases", "Rank", "Distance to you"])
+#    return tabulate(outputData, headers=["Location", "Cases", "Rank", "Distance to you"])
 
 app = Flask(__name__)
 
 @app.route("/location/<location>")
 def getLocation(location):
-    return jsonify(getCovid19Numbers(location))
+    response = jsonify(getCovid19Numbers(location))
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 @app.route("/total")
 def getTotalNumberOfCases():
