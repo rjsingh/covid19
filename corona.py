@@ -72,7 +72,7 @@ def getCovid19Numbers(locationName):
                            'rank': word_engine.ordinal(ranks[cases]),
                            'distance': "%.2f" % dist})
 
-    return outputData
+    return { "your_location": str(myLocation) if myLocation else "<unknown location>", "data": outputData }
 #    return tabulate(outputData, headers=["Location", "Cases", "Rank", "Distance to you"])
 
 app = Flask(__name__)
