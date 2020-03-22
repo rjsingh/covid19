@@ -5,6 +5,7 @@ from tabulate import tabulate
 import urllib.request
 from geopy import distance
 from geopy.geocoders import Nominatim
+from flask import Flask, jsonify
 
 geolocator = Nominatim(user_agent="Nominatim", timeout=10)
 def getClosestCouncil(loc, counties):
@@ -12,11 +13,9 @@ def getClosestCouncil(loc, counties):
     countiesLoc = {}
 
     if os.path.isfile(cache_file):
-        print("Using cache file...")
         with open(cache_file, 'r') as f:
             countiesLoc = json.load(f)
     else:
-        print("Downloading data...")
         # get lat/long of all counties
         for i, c in enumerate(counties):
             l = geolocator.geocode(c)
@@ -24,14 +23,14 @@ def getClosestCouncil(loc, counties):
         # cache it for next time.
         with open(cache_file, 'w') as f:
             f.write(json.dumps(countiesLoc))
-    
+
     # now calculate distance between 'loc' and each of these counties
     countiesDist = {}
     for name, countieLoc in countiesLoc.items():
         dist = distance.distance((loc.latitude, loc.longitude),
                                  (countieLoc['latitude'], countieLoc['longitude'])).miles
         countiesDist[name] = dist
-    
+
     # now sort countieLoc by distance (value)
     return {k:v for k, v in sorted(countiesDist.items(), key=lambda item: item[1])}
 
@@ -47,7 +46,7 @@ def getCovid19Data():
         county = county.strip().replace("\"", "")
         cases = "".join(parts[-1:]).strip()
         countyMap[county] = int(cases)
-    
+
     return {k:v for k, v in sorted(countyMap.items(), key=lambda item: item[1])}
 
 def getRanks(countyMap):
@@ -58,18 +57,29 @@ def getRanks(countyMap):
         rank[c] = idx
     return rank
 
-countyMap = getCovid19Data()
-ranks = getRanks(countyMap)
-print("Total: %s" % (str(sum(countyMap.values()))))
+def getCovid19Numbers(locationName):
+    countyMap = getCovid19Data()
+    ranks = getRanks(countyMap)
+    myLocation = geolocator.geocode(locationName)
+    closestCouncil = getClosestCouncil(myLocation, countyMap.keys())
 
-myLocation = geolocator.geocode("Cambridge")
-closestCouncil = getClosestCouncil(myLocation, countyMap.keys())
+    # format data for displaying nicely in command line.
+    outputData = []
+    word_engine = inflect.engine()
+    for county, dist in closestCouncil.items():
+        cases = countyMap[county]
+        outputData.append([county, cases, word_engine.ordinal(ranks[cases]), "%.2f" % dist])
 
-# format data for displaying nicely in command line.
-outputData = []
-word_engine = inflect.engine()
-for county, dist in closestCouncil.items():
-    cases = countyMap[county]
-    outputData.append([county, cases, word_engine.ordinal(ranks[cases]), "%.2f" % dist])
+    return outputData
+    return tabulate(outputData, headers=["Location", "Cases", "Rank", "Distance to you"])
 
-print(tabulate(outputData, headers=["Location", "Cases", "Rank", "Distance to you"]))
+app = Flask(__name__)
+
+@app.route("/location/<location>")
+def getLocation(location):
+    return jsonify(getCovid19Numbers(location))
+
+@app.route("/total")
+def getTotalNumberOfCases():
+    countyMap = getCovid19Data()
+    return str(sum(countyMap.values()))
