@@ -51,11 +51,16 @@ class CoronaCasesTable extends React.Component {
       text: "Distance to you (miles)",
       sort: true
     }];
-
     return (
       <div>
-        <h2>Location: {this.state.locationName}</h2>
-        <BootstrapTable bootstrap4 keyField='county' data={ cases } columns={ columns } striped hover condensed />
+        <h4>Location: {this.state.locationName}</h4>
+        <div>
+          <BootstrapTable bootstrap4
+                          keyField='county'
+                          data={ cases }
+                          columns={ columns }
+                          striped hover condensed />
+        </div>
       </div>
     );
   }

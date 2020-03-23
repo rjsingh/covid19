@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Nav, NavDropdown} from 'react-bootstrap';
+import { Navbar} from 'react-bootstrap';
 import './App.css';
 import CoronaCasesTable from './CoronaCasesTable';
 
