@@ -25,11 +25,12 @@ def getClosestCouncil(loc, counties):
             f.write(json.dumps(countiesLoc))
 
     # now calculate distance between 'loc' and each of these counties
-    countiesDist = {}
-    for name, countieLoc in countiesLoc.items():
-        dist = distance.distance((loc.latitude, loc.longitude),
-                                 (countieLoc['latitude'], countieLoc['longitude'])).miles
-        countiesDist[name] = dist
+    countiesDist = {name:0 for name in countiesLoc.keys()}
+    if loc:
+        for name, countieLoc in countiesLoc.items():
+            dist = distance.distance((loc.latitude, loc.longitude),
+                                    (countieLoc['latitude'], countieLoc['longitude'])).miles
+            countiesDist[name] = dist
 
     # now sort countieLoc by distance (value)
     return {k:v for k, v in sorted(countiesDist.items(), key=lambda item: item[1])}
@@ -60,7 +61,9 @@ def getRanks(countyMap):
 def getCovid19Numbers(locationName):
     countyMap = getCovid19Data()
     ranks = getRanks(countyMap)
-    myLocation = geolocator.geocode(locationName)
+    myLocation = None
+    if locationName:
+        myLocation = geolocator.geocode(locationName)
     closestCouncil = getClosestCouncil(myLocation, countyMap.keys())
 
     # format data for displaying nicely in command line.
@@ -72,12 +75,18 @@ def getCovid19Numbers(locationName):
                            'rank': word_engine.ordinal(ranks[cases]),
                            'distance': "%.2f" % dist})
 
+    if not myLocation:
+        # if user didn't provide a location then return items sorted by number of cases
+        outputData = sorted(outputData, key=lambda item: item['cases'], reverse=True)
+
     return { "your_location": myLocation.address if myLocation else "<unknown location>", "data": outputData }
 
 app = Flask(__name__)
 
+@app.route("/location/")
 @app.route("/location/<location>")
-def getLocation(location):
+def getLocation(location=None):
+    print(location)
     response = jsonify(getCovid19Numbers(location))
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
