@@ -7,8 +7,8 @@ from geopy import distance
 from geopy.geocoders import Nominatim
 from flask import Flask, jsonify, render_template
 
-geolocator = Nominatim(user_agent="Nominatim", timeout=10)
 def getClosestCouncil(loc, counties):
+    geolocator = Nominatim(user_agent="Nominatim", timeout=10)
     cache_file = "location_cache.json"
     countiesLoc = {}
 
@@ -59,6 +59,7 @@ def getRanks(countyMap):
     return rank
 
 def getCovid19Numbers(locationName):
+    geolocator = Nominatim(user_agent="Nominatim", timeout=10)
     countyMap = getCovid19Data()
     ranks = getRanks(countyMap)
     myLocation = None
