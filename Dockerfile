@@ -13,3 +13,4 @@ COPY requirements.txt /tmp
 RUN pip install -r /tmp/requirements.txt
 COPY ./corona.py /app/main.py
 COPY --from=build-deps /usr/src/app/build /app
+COPY ./uwsgi.ini /app
