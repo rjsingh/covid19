@@ -1,6 +1,7 @@
 import React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
 import Spinner from 'react-bootstrap/Spinner';
+import Toast from 'react-bootstrap/Toast'
 
 class CoronaCasesTable extends React.Component {
   constructor() {
@@ -62,12 +63,19 @@ class CoronaCasesTable extends React.Component {
           </div>
         :
           <div>
-          <h4>Location: {this.state.locationName}</h4>
+          <Toast>
+            <Toast.Header>
+              <strong>Location</strong>
+            </Toast.Header>
+            <Toast.Body>
+              {this.state.locationName}
+            </Toast.Body>
+          </Toast>
           <BootstrapTable bootstrap4
                           keyField='county'
                           data={ cases }
                           columns={ columns }
-                          striped hover condensed />
+                          striped hover condensed className="theme-dark" />
           </div>
         }
       </div>
