@@ -5,7 +5,7 @@ from tabulate import tabulate
 import urllib.request
 from geopy import distance
 from geopy.geocoders import Nominatim
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 
 geolocator = Nominatim(user_agent="Nominatim", timeout=10)
 def getClosestCouncil(loc, counties):
@@ -81,7 +81,11 @@ def getCovid19Numbers(locationName):
 
     return { "your_location": myLocation.address if myLocation else "<unknown location>", "data": outputData }
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='/app/static', template_folder='/app/')
+
+@app.route("/")
+def index():
+    return render_template('index.html')
 
 @app.route("/location/")
 @app.route("/location/<location>")
