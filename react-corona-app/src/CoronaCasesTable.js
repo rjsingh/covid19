@@ -46,11 +46,10 @@ class CoronaCasesTable extends React.Component {
       sort: true
     }, {
       dataField: 'rank',
-      text: "Rank (higher is worse)"
+      text: "Rank (1st is worst)"
     }, {
       dataField: 'distance',
-      text: "Distance to you (miles)",
-      sort: true
+      text: "Distance to you (miles)"
     }];
     return (
       <div>
@@ -63,14 +62,7 @@ class CoronaCasesTable extends React.Component {
           </div>
         :
           <div>
-          <Toast>
-            <Toast.Header>
-              <strong>Location</strong>
-            </Toast.Header>
-            <Toast.Body>
-              {this.state.locationName}
-            </Toast.Body>
-          </Toast>
+          <p>Location: {this.state.locationName}</p>
           <BootstrapTable bootstrap4
                           keyField='county'
                           data={ cases }
