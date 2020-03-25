@@ -1,8 +1,9 @@
 import React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import Spinner from 'react-bootstrap/Spinner';
-import Card from 'react-bootstrap/Card';
+import Alert from 'react-bootstrap/Alert';
 
 class CoronaCasesTable extends React.Component {
   constructor() {
@@ -38,19 +39,23 @@ class CoronaCasesTable extends React.Component {
 
   render() {
     const { cases} = this.state;
+    const { SearchBar } = Search;
     const columns = [{
       dataField: 'county',
-      text: 'County'
+      text: 'Region',
     }, {
       dataField: 'cases',
       text: '# Cases',
-      sort: true
+      sort: true,
+      searchable: false
     }, {
       dataField: 'rank',
-      text: "Rank"
+      text: "Rank",
+      searchable: false
     }, {
       dataField: 'distance',
-      text: "Distance to you (miles)"
+      text: "Distance to you (miles)",
+      searchable: false
     }];
     return (
       <div>
@@ -63,19 +68,24 @@ class CoronaCasesTable extends React.Component {
           </div>
         :
           <div>
-            <Card style={{ width: '18rem' }}>
-              <Card.Header>Location</Card.Header>
-              <Card.Body>
-                <Card.Text>
-                  {this.state.locationName}
-                </Card.Text>
-              </Card.Body>
-            </Card>
-            <BootstrapTable bootstrap4
-                            keyField='county'
-                            data={ cases }
-                            columns={ columns }
-                            striped hover condensed pagination={ paginationFactory() } />
+            <Alert variant="dark">Location: <i>{this.state.locationName}</i></Alert>
+            <ToolkitProvider
+              keyField="county"
+              data={ cases }
+              columns={ columns }
+              search>
+              {
+                props => (
+                  <div>
+                  <SearchBar { ...props.searchProps } />
+                  <hr />
+                  <BootstrapTable bootstrap4
+                                  { ...props.baseProps }
+                                  striped hover condensed pagination={ paginationFactory() } />
+                  </div>
+                )
+              }
+            </ToolkitProvider>
           </div>
         }
       </div>

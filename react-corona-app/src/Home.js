@@ -1,6 +1,6 @@
 import React from "react";
 import CoronaCasesTable from './CoronaCasesTable';
-import {Container, Row, Col, Jumbotron, Button} from 'react-bootstrap';
+import {Container, Row, Col, Jumbotron} from 'react-bootstrap';
 
 function Home() {
   return (
