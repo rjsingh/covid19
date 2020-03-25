@@ -11,7 +11,7 @@ function Home() {
           within the UK.The data source for the information is from <a href="https://www.arcgis.com/home/item.html?id=bc8ee90225644ef7a6f4dd1b13ea1d67">Arcgis</a>
         </p>
         <p>
-          This site does not provide medical information or anything to that affect. Please if you're a UK resident
+          This site does not provide medical information or anything to that effect. Please if you're a UK resident
           who wants medical information go to the <a href="https://www.nhs.uk/conditions/coronavirus-covid-19/"> NHS website</a>
         </p>
       </Jumbotron>

@@ -8,7 +8,9 @@ from geopy.geocoders import Nominatim
 from flask import Flask, jsonify, render_template
 
 def getClosestCouncil(loc, counties):
-    geolocator = Nominatim(user_agent="Nominatim", timeout=10)
+    geolocator = Nominatim(user_agent="Nominatim",
+                           timeout=10,
+                           format_string="%s, UK")
     cache_file = "location_cache.json"
     countiesLoc = {}
 
