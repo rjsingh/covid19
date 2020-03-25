@@ -1,0 +1,16 @@
+version: '2.0'
+services:
+  app:
+    build: .
+    networks:
+      - web
+      - default
+    restart: always
+    labels:
+      - "traefik.docker.network=web"
+      - "traefik.basic.frontend.rule=Host:cov19uk.info,www.cov19uk.info"
+      - "traefik.port=80"
+
+networks:
+  web:
+    external: true
