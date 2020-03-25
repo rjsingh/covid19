@@ -1,7 +1,7 @@
 import React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 import Spinner from 'react-bootstrap/Spinner';
-import Toast from 'react-bootstrap/Toast'
 
 class CoronaCasesTable extends React.Component {
   constructor() {
@@ -23,7 +23,7 @@ class CoronaCasesTable extends React.Component {
   loadData(location=null) {
     // Fetching data from FaceBook Jest Repo
     fetch(
-      '/location/' + location,
+      'http://localhost/location/' + location,
       {
         method: "GET",
       }
@@ -46,7 +46,7 @@ class CoronaCasesTable extends React.Component {
       sort: true
     }, {
       dataField: 'rank',
-      text: "Rank (1st is worst)"
+      text: "Rank"
     }, {
       dataField: 'distance',
       text: "Distance to you (miles)"
@@ -67,7 +67,7 @@ class CoronaCasesTable extends React.Component {
                           keyField='county'
                           data={ cases }
                           columns={ columns }
-                          striped hover condensed className="theme-dark" />
+                          striped hover condensed pagination={ paginationFactory() } />
           </div>
         }
       </div>
