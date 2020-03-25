@@ -23,9 +23,8 @@ class CoronaCasesTable extends React.Component {
   }
 
   loadData(location=null) {
-    // Fetching data from FaceBook Jest Repo
     fetch(
-      'http://localhost/location/' + location,
+      '/location/' + location,
       {
         method: "GET",
       }

@@ -5,6 +5,8 @@ services:
     networks:
       - default
     restart: always
+    ports:
+      - "80:80"
     labels:
       - "traefik.docker.network=web"
       - "traefik.basic.frontend.rule=Host:cov19uk.info,www.cov19uk.info"
