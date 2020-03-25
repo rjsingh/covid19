@@ -1,15 +1,26 @@
 import React from "react";
 import CoronaCasesTable from './CoronaCasesTable';
-import {Container, Row, Col} from 'react-bootstrap';
+import {Container, Row, Col, Jumbotron, Button} from 'react-bootstrap';
 
 function Home() {
   return (
-    <Container>
-        <Row>
-            <Col><CoronaCasesTable /></Col>
-            <Col><p>Something else</p></Col>
-        </Row>
-    </Container>
+    <div>
+      <Jumbotron>
+        <p>
+          This site was created to provide UK residents statistical information on the spread of the coronavirus
+          within the UK.The data source for the information is from <a href="https://www.arcgis.com/home/item.html?id=bc8ee90225644ef7a6f4dd1b13ea1d67">Arcgis</a>
+        </p>
+        <p>
+          This site does not provide medical information or anything to that affect. Please if you're a UK resident
+          who wants medical information go to the <a href="https://www.nhs.uk/conditions/coronavirus-covid-19/"> NHS website</a>
+        </p>
+      </Jumbotron>
+      <Container>
+          <Row>
+              <Col><CoronaCasesTable /></Col>
+          </Row>
+      </Container>
+    </div>
   )
 }
 

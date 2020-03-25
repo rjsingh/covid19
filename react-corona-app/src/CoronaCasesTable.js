@@ -2,6 +2,7 @@ import React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import Spinner from 'react-bootstrap/Spinner';
+import Card from 'react-bootstrap/Card';
 
 class CoronaCasesTable extends React.Component {
   constructor() {
@@ -62,12 +63,19 @@ class CoronaCasesTable extends React.Component {
           </div>
         :
           <div>
-          <p>Location: {this.state.locationName}</p>
-          <BootstrapTable bootstrap4
-                          keyField='county'
-                          data={ cases }
-                          columns={ columns }
-                          striped hover condensed pagination={ paginationFactory() } />
+            <Card style={{ width: '18rem' }}>
+              <Card.Header>Location</Card.Header>
+              <Card.Body>
+                <Card.Text>
+                  {this.state.locationName}
+                </Card.Text>
+              </Card.Body>
+            </Card>
+            <BootstrapTable bootstrap4
+                            keyField='county'
+                            data={ cases }
+                            columns={ columns }
+                            striped hover condensed pagination={ paginationFactory() } />
           </div>
         }
       </div>
