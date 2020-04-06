@@ -48,7 +48,7 @@ def getCovid19Data():
         county = ",".join(parts[:-1])
         county = county.strip().replace("\"", "")
         cases = "".join(parts[-1:]).strip()
-        cases = cases.replace(",", "")
+        cases = cases.replace(",", "").replace("\"", "").replace(" ", "")
         countyMap[county] = int(cases)
 
     return {k:v for k, v in sorted(countyMap.items(), key=lambda item: item[1])}
